@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>risk-app test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../src/risk-app/betdata-csv-parser.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <betdata-csv-parser id="csvParser"></betdata-csv-parser>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('betdata-csv-parser', function() {
+
+        test('sample csv text returns expected parsed response', function() {
+          var element = fixture('basic');
+          
+          var sampleText = "Header 1,header2,my Header 3\n1,222,33\n4,555,6666";
+          var data = element.parse(sampleText);
+          
+          assert.lengthOf(data, 2);
+          console.log(data)
+          assert.sameDeepMembers(data, [
+            { header1: 1, header2: 222, myHeader3: 33 },
+            { header1: 4, header2: 555, myHeader3: 6666 }
+          ]);
+        });
+
+      });
+    </script>
+  </body>
+</html>
