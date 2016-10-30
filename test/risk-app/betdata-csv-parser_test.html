@@ -27,11 +27,13 @@
           var sampleText = "Header 1,header2,my Header 3\n1,222,33\n4,555,6666";
           var data = element.parse(sampleText);
           
-          assert.lengthOf(data, 2);
-          assert.sameDeepMembers(data, [
-            { header1: 1, header2: 222, myHeader3: 33 },
-            { header1: 4, header2: 555, myHeader3: 6666 }
-          ]);
+          assert.deepEqual(data, {
+            headers: ['Header 1', 'header2', 'my Header 3'],
+            rows: [
+              [1, 222, 33],
+              [4, 555, 6666]
+            ]
+          });
         });
 
       });

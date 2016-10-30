@@ -16,6 +16,12 @@
     
     <iron-ajax url="Settled.csv" auto on-response="_handleSettledData" handle-as="text"></iron-ajax>
     <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
+  
+    <h3>Settled Data</h3>
+    <div>{{_settledData}}</div>
+    
+    <h3>Unsettled Data</h3>
+    <div>{{_unsettledData}}</div>
   </template>
 
   <script>
@@ -31,15 +37,15 @@
       },
       
       
+      _settledData: null,
+      _unsettledData: null,
+      
       _handleSettledData: function(data) {
-        var settledData = this.$.csvParser.parse(data.detail.response);
-        
-        console.log('settled', settledData);
+        this._settledData = this.$.csvParser.parse(data.detail.response);
       },
       
       _handleUnsettledData: function(data) {
-        var unsettledData = this.$.csvParser.parse(data.detail.response);
-        console.log('unsettled', unsettledData);
+        this._unsettledData = this.$.csvParser.parse(data.detail.response);
       }
 
     });

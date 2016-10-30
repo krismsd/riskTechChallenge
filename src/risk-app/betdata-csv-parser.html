@@ -11,37 +11,23 @@
       
       // Parse out header
       var headersLine = lines[0];
-      var headers = headersLine.split(',').map(this._convertHeader); 
+      var headers = headersLine.split(','); 
 
       // Get data - everything but first line
       var dataLines = lines.slice(1);
       
-      return dataLines.map(function(line) { 
-        return this._convertData(line, headers);  
-      }.bind(this));
+      return {
+        headers: headers,
+        rows: dataLines.map(this._convertData)
+      };
     },
     
-    _convertHeader: function(text) {
-      // Convert the header to camelcase e.g. "To Win" -> "toWin"
-      return text.toLowerCase().replace(/ ./g, function(group) {
-        return group.substr(1).toUpperCase();
-      });
-    },
-    
-    _convertData: function(line, headers) {
+    _convertData: function(line) {
       var cells = line.split(',');
-      
-      var obj = {};
-      for (var i = 0; i < headers.length; i++) {
-        var header = headers[i];
-        
+      return cells.map(function(cell) {
         // Given all the cells are only integers here I assume to treat them as such 
-        var cell = Number.parseInt(cells[i]);
-        
-        obj[header] = cell;
-      }
-      
-      return obj;
+        return Number.parseInt(cell);
+      });
     }
   });
 
