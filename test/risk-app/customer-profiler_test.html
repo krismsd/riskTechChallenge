@@ -35,25 +35,36 @@
         test('customer shouldnt be risky when number of wins is below threshold', function() {
           var element = fixture('basic');
         
-          var headers = ["Win"];
-          var rows = [[1], [1], [0], [0], [0], [0], [1], [1]]; // 4 wins out of 8 = 50%
+          var headers = ["Stake", "Win"];
+          var rows = [[0,1], [0,1], [0,0], [0,0], [0,0], [0,0], [0,1], [0,1]]; // 4 wins out of 8 = 50%
           
           var profile = element.profileCustomer(rows, headers);
           
           assert.equal(profile.isRisky, false);
         });
         
+        test('stake average should be calculated from stakes passed in', function() {
+          var element = fixture('basic');
+        
+          var headers = ["Stake", "Win"];
+          var rows = [[100,1], [200,1], [300,0], [200,0]];
+          
+          var profile = element.profileCustomer(rows, headers);
+          
+          assert.equal(profile.stakeAverage, 200);
+        });
+        
         test('get customer profiles from settled data', function() {
           var element = fixture('basic');
           
-          var headers = ["Customer", "Win"];
-          var rows = [[1, 1], [1, 1], [1, 0], [2, 1], [2, 0]]; // 1: 66%, 2: 50%
+          var headers = ["Customer", "Stake", "Win"];
+          var rows = [[1, 10, 1], [1, 5, 1], [1, 15, 0], [2, 100, 1], [2, 100, 0]]; // 1: 66%, 2: 50%
           
           var profiles = element.profileCustomersFromSettledData({ headers: headers, rows: rows });
           
           assert.deepEqual(profiles, {
-            1: { isRisky: true },
-            2: { isRisky: false }
+            1: { isRisky: true, stakeAverage: 10 },
+            2: { isRisky: false, stakeAverage: 100 }
           });
         });
 

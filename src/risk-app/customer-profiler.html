@@ -39,16 +39,22 @@
     
     profileCustomer: function(customerData, headers) {
       // Get avg win percentage for customer
-      var winIndex = headers.indexOf("Win");
+      var winIndex = headers.indexOf('Win');
       var wins = customerData.filter(function(row) {
         return row[winIndex] > 0;
       }).length;
       var winPercentage = wins / customerData.length;
-      
       var isCustomerRisky = winPercentage >= this._CUSTOMER_RISKY_THRESHOLD;
       
+      var stakeIndex = headers.indexOf('Stake');
+      var sumOfStakes = customerData.reduce(function(sum, row) {
+        return sum + row[stakeIndex];
+      }, 0);
+      var stakeAverage = sumOfStakes / customerData.length;
+      
       return {
-        isRisky: isCustomerRisky
+        isRisky: isCustomerRisky,
+        stakeAverage: stakeAverage
       };
     }
     
