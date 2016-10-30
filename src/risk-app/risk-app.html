@@ -60,11 +60,58 @@
       },
       
       
+      _CUSTOMER_RISKY_THRESHOLD: 0.60,
+      
       _settledData: null,
       _unsettledData: null,
       
+      _customerProfiles: null,
+      
       _handleSettledData: function(data) {
         this._settledData = this.$.csvParser.parse(data.detail.response);
+        this._profileCustomers(this._settledData);
+      },
+      
+      _profileCustomers: function(settledData) {
+        var settledDataByCustomer = this._groupDataByCustomer(settledData);
+        
+        var customerProfiles = {};
+        var customers = Object.keys(settledDataByCustomer);
+        customers.forEach(function(customer) {
+          var customerData = settledDataByCustomer[customer];
+          
+          // Get avg win percentage for customer
+          var winIndex = settledData.headers.indexOf("Win");
+          var wins = customerData.filter(function(row) {
+            return row[winIndex] > 0;
+          }).length;
+          var winPercentage = wins / customerData.length;
+          
+          var isCustomerRisky = winPercentage >= this._CUSTOMER_RISKY_THRESHOLD;
+          
+          customerProfiles[customer] = {
+            customer: customer,
+            isRisky: isCustomerRisky
+          };          
+        }.bind(this));
+        
+        this._customerProfiles = customerProfiles;
+      },
+      
+      _groupDataByCustomer: function(settledData) {
+        var customerIndex = settledData.headers.indexOf("Customer");
+        
+        var settledDataByCustomer = {};
+        settledData.rows.forEach(function(row) {
+          var customer = row[customerIndex];
+          if (!settledDataByCustomer[customer]) {
+            settledDataByCustomer[customer] = [];
+          }
+          
+          settledDataByCustomer[customer].push(row);
+        });
+        
+        return settledDataByCustomer;  
       },
       
       _handleUnsettledData: function(data) {

@@ -12,7 +12,7 @@
       
       // Parse out header
       var headersLine = lines[0];
-      var headers = headersLine.split(','); 
+      var headers = headersLine.split(',').map(function(header) { return header.trim(); }); 
 
       // Get data - everything but first line
       var dataLines = lines.slice(1);
@@ -27,7 +27,7 @@
       var cells = line.split(',');
       return cells.map(function(cell) {
         // Given all the cells are only integers here I assume to treat them as such 
-        return Number.parseInt(cell);
+        return Number.parseInt(cell.trim());
       });
     }
   });
