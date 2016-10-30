@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="unsettled-display">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      
+      .table {
+        display: table;
+      }
+      
+      .row {
+        display: table-row;
+      }
+      
+      .header {
+        display: table-header-group;
+        font-weight: bold;
+      }
+      
+      .cell {
+        display: table-cell;
+        padding: 5px;
+        background-color: #DDDDDD;
+        border-top: 1px solid #CCCCCC; 
+      }
+      
+      .header .cell {
+        border-bottom: 1px solid black;
+        padding-bottom: 0px;
+        background-color: black;
+        color: white;
+      }
+      
+      .cell.risky {
+        background-color: #FF4444;
+      }
+    </style>
+    
+    <h3>Upcoming Bets</h3>
+    <div class="table">
+      <div class="header">
+        <template is="dom-repeat" items="{{unsettledData.headers}}">
+          <span class="cell">{{item}}</span>
+        </template>
+      </div>
+      
+      <template is="dom-repeat" items="{{unsettledData.rows}}" as="row">
+        <div class="row">
+          <template is="dom-repeat" items="{{row}}">
+            <span class$="{{computeClass(row, unsettledData.headers)}}">{{item}}</span>
+          </template>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'unsettled-display',
+
+      properties: {
+        unsettledData: Object,
+        customerProfiles: Object
+      },
+      
+      computeClass: function(row, headers) {
+        var customerIndex = headers.indexOf('Customer');
+        var customer = row[customerIndex];
+        var customerProfile = this.customerProfiles[customer];
+        
+        var classes = ['cell']
+        
+        if (customerProfile.isRisky) {
+          classes.push('risky');
+        }
+        
+        // TODO: need to identify risk of unsettled data here
+        
+        return classes.join(' ');
+      }
+
+    });
+  </script>
+</dom-module>

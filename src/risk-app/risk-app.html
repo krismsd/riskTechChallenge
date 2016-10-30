@@ -4,39 +4,13 @@
 <link rel="import" href="betdata-csv-parser.html">
 <link rel="import" href="customer-profiler.html">
 <link rel="import" href="settled-display.html">
+<link rel="import" href="unsettled-display.html">
 
 <dom-module id="risk-app">
   <template>
     <style>
       :host {
         display: block;
-      }
-      
-      .table {
-        display: table;
-      }
-      
-      .row {
-        display: table-row;
-      }
-      
-      .header {
-        display: table-header-group;
-        font-weight: bold;
-      }
-      
-      .cell {
-        display: table-cell;
-        padding: 5px;
-        background-color: #DDDDDD;
-        border-top: 1px solid #CCCCCC; 
-      }
-      
-      .header .cell {
-        border-bottom: 1px solid black;
-        padding-bottom: 0px;
-        background-color: black;
-        color: white;
       }
     </style>
     
@@ -47,24 +21,7 @@
     <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
   
     <settled-display settled-data="{{_settledData}}" customer-profiles="{{_customerProfiles}}"></settled-display>
-
-    
-    <h3>Upcoming Bets</h3>
-    <div class="table">
-      <div class="header">
-        <template is="dom-repeat" items="{{_unsettledData.headers}}">
-          <span class="cell">{{item}}</span>
-        </template>
-      </div>
-      
-      <template is="dom-repeat" items="{{_unsettledData.rows}}">
-        <div class="row">
-          <template is="dom-repeat" items="{{item}}">
-            <span class="cell">{{item}}</span>
-          </template>
-        </div>
-      </template>
-    </div>
+    <unsettled-display unsettled-data="{{_unsettledData}}" customer-profiles="{{_customerProfiles}}"></unsettled-display>
   </template>
 
   <script>
