@@ -6,13 +6,38 @@
       :host {
         display: block;
       }
+      
+      .table {
+        display: table;
+      }
+      
+      .row {
+        display: table-row;
+      }
+      
+      .header {
+        display: table-header-group;
+        font-weight: bold;
+      }
+      
+      .cell {
+        display: table-cell;
+        padding: 5px;
+      }
+      
+      .header .cell {
+        border-bottom: 1px solid black;
+        padding-bottom: 0px;
+      }
     </style>
     
-    <h3>Settled Data</h3>
+    <h3>Bet History</h3>
     <div class="table">
-      <template is="dom-repeat" items="{{settledData.headers}}">
-        <span class="header">{{item}}</span>
-      </template>
+      <div class="header">
+        <template is="dom-repeat" items="{{settledData.headers}}">
+          <span class="cell">{{item}}</span>
+        </template>
+      </div>
       
       <template is="dom-repeat" items="{{settledData.rows}}" as="row">
         <div class="row">

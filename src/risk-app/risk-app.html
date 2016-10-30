@@ -11,6 +11,29 @@
       :host {
         display: block;
       }
+      
+      .table {
+        display: table;
+      }
+      
+      .row {
+        display: table-row;
+      }
+      
+      .header {
+        display: table-header-group;
+        font-weight: bold;
+      }
+      
+      .cell {
+        display: table-cell;
+        padding: 5px;
+      }
+      
+      .header .cell {
+        border-bottom: 1px solid black;
+        padding-bottom: 0px;
+      }
     </style>
     
     <betdata-csv-parser id="csvParser"></bet-csv-parser>
@@ -22,18 +45,22 @@
     <settled-display settled-data="{{_settledData}}" customer-profiles="{{_customerProfiles}}"></settled-display>
 
     
-    <h3>Unsettled Data</h3>
-    <template is="dom-repeat" items="{{_unsettledData.headers}}">
-      <span class="header">{{item}}</span>
-    </template>
-    
-    <template is="dom-repeat" items="{{_unsettledData.rows}}">
-      <div class="row">
-        <template is="dom-repeat" items="{{item}}">
+    <h3>Upcoming Bets</h3>
+    <div class="table">
+      <div class="header">
+        <template is="dom-repeat" items="{{_unsettledData.headers}}">
           <span class="cell">{{item}}</span>
         </template>
       </div>
-    </template>
+      
+      <template is="dom-repeat" items="{{_unsettledData.rows}}">
+        <div class="row">
+          <template is="dom-repeat" items="{{item}}">
+            <span class="cell">{{item}}</span>
+          </template>
+        </div>
+      </template>
+    </div>
   </template>
 
   <script>
