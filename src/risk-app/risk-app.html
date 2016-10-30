@@ -3,6 +3,7 @@
 
 <link rel="import" href="betdata-csv-parser.html">
 <link rel="import" href="customer-profiler.html">
+<link rel="import" href="settled-display.html">
 
 <dom-module id="risk-app">
   <template>
@@ -18,20 +19,7 @@
     <iron-ajax url="Settled.csv" auto on-response="_handleSettledData" handle-as="text"></iron-ajax>
     <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
   
-    <h3>Settled Data</h3>
-    <div class="table">
-      <template is="dom-repeat" items="{{_settledData.headers}}">
-        <span class="header">{{item}}</span>
-      </template>
-      
-      <template is="dom-repeat" items="{{_settledData.rows}}">
-        <div class="row">
-          <template is="dom-repeat" items="{{item}}">
-            <span class="cell">{{item}}</span>
-          </template>
-        </div>
-      </template>
-    </div>
+    <settled-display settled-data="{{_settledData}}" customer-profiles="{{_customerProfiles}}"></settled-display>
 
     
     <h3>Unsettled Data</h3>

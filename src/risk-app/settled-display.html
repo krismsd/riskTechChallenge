@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="settled-display">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    
+    <h3>Settled Data</h3>
+    <div class="table">
+      <template is="dom-repeat" items="{{settledData.headers}}">
+        <span class="header">{{item}}</span>
+      </template>
+      
+      <template is="dom-repeat" items="{{settledData.rows}}" as="row">
+        <div class="row">
+          <template is="dom-repeat" items="{{row}}">
+            <span class="cell">{{item}}</span>
+          </template>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'settled-display',
+
+      properties: {
+        settledData: Object,
+        customerProfiles: Object
+      }
+
+    });
+  </script>
+</dom-module>
