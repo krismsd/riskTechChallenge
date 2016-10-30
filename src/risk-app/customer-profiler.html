@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<script>
+  'use strict';
+  
+  Polymer({
+    is: 'customer-profiler',
+    
+    _CUSTOMER_RISKY_THRESHOLD: 0.60,
+    
+    profileCustomer: function(customerData, headers) {
+      // Get avg win percentage for customer
+      var winIndex = headers.indexOf("Win");
+      var wins = customerData.filter(function(row) {
+        return row[winIndex] > 0;
+      }).length;
+      var winPercentage = wins / customerData.length;
+      
+      var isCustomerRisky = winPercentage >= this._CUSTOMER_RISKY_THRESHOLD;
+      
+      return {
+        isRisky: isCustomerRisky
+      };
+    }
+    
+  });
+</script>

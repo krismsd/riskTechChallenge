@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>risk-app test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../src/risk-app/customer-profiler.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <betdata-csv-parser id="profiler"></betdata-csv-parser>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('customer-profiler', function() {
+
+        test('customer should be risky when number of wins exceeds threshold', function() {
+          var element = fixture('basic');
+        
+          var headers = ["Win"];
+          var rows = [[1], [1], [1], [0], [0], [0], [1], [1]]; // 5 wins out of 8 = 62%
+          
+          var profile = element.profileCustomer(rows, headers);
+          
+          assert.equal(profile.isRisky, true);
+        });
+        
+        test('custom shouldnt be risky when number of wins is below threshold', function() {
+          var element = fixture('basic');
+        
+          var headers = ["Win"];
+          var rows = [[1], [1], [0], [0], [0], [0], [1], [1]]; // 4 wins out of 8 = 50%
+          
+          var profile = element.profileCustomer(rows, headers);
+          
+          assert.equal(profile.isRisky, false);
+        });
+
+      });
+    </script>
+  </body>
+</html>

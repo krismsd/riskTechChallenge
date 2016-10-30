@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="betdata-csv-parser.html">
+<link rel="import" href="customer-profiler.html">
 
 <dom-module id="risk-app">
   <template>
@@ -13,6 +14,7 @@
     <h2>Hello [[prop1]]</h2>
     
     <betdata-csv-parser id="csvParser"></bet-csv-parser>
+    <customer-profiler id="customerProfiler"></custome-profiler>
     
     <iron-ajax url="Settled.csv" auto on-response="_handleSettledData" handle-as="text"></iron-ajax>
     <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
@@ -60,8 +62,6 @@
       },
       
       
-      _CUSTOMER_RISKY_THRESHOLD: 0.60,
-      
       _settledData: null,
       _unsettledData: null,
       
@@ -79,20 +79,7 @@
         var customers = Object.keys(settledDataByCustomer);
         customers.forEach(function(customer) {
           var customerData = settledDataByCustomer[customer];
-          
-          // Get avg win percentage for customer
-          var winIndex = settledData.headers.indexOf("Win");
-          var wins = customerData.filter(function(row) {
-            return row[winIndex] > 0;
-          }).length;
-          var winPercentage = wins / customerData.length;
-          
-          var isCustomerRisky = winPercentage >= this._CUSTOMER_RISKY_THRESHOLD;
-          
-          customerProfiles[customer] = {
-            customer: customer,
-            isRisky: isCustomerRisky
-          };          
+          customerProfiles[customer] = this.$.customerProfiler.profileCustomer(customerData, settledData.headers);          
         }.bind(this));
         
         this._customerProfiles = customerProfiles;
