@@ -18,10 +18,33 @@
     <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
   
     <h3>Settled Data</h3>
-    <div>{{_settledData}}</div>
+    <div class="table">
+      <template is="dom-repeat" items="{{_settledData.headers}}">
+        <span class="header">{{item}}</span>
+      </template>
+      
+      <template is="dom-repeat" items="{{_settledData.rows}}">
+        <div class="row">
+          <template is="dom-repeat" items="{{item}}">
+            <span class="cell">{{item}}</span>
+          </template>
+        </div>
+      </template>
+    </div>
+
     
     <h3>Unsettled Data</h3>
-    <div>{{_unsettledData}}</div>
+    <template is="dom-repeat" items="{{_unsettledData.headers}}">
+      <span class="header">{{item}}</span>
+    </template>
+    
+    <template is="dom-repeat" items="{{_unsettledData.rows}}">
+      <div class="row">
+        <template is="dom-repeat" items="{{item}}">
+          <span class="cell">{{item}}</span>
+        </template>
+      </div>
+    </template>
   </template>
 
   <script>
