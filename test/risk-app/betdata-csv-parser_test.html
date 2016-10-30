@@ -35,6 +35,18 @@
             ]
           });
         });
+        
+        test('doesnt treat trailing newline as an empty row', function() {
+          var element = fixture('basic');
+          
+          var sampleText = "H1,H2,H3\n1,2,3\n";
+          var data = element.parse(sampleText);
+
+          assert.deepEqual(data, {
+            headers: ['H1', 'H2', 'H3'],
+            rows: [[1, 2, 3]]
+          });
+        })
 
       });
     </script>
