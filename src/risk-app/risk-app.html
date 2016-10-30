@@ -13,7 +13,7 @@
     </style>
     
     <betdata-csv-parser id="csvParser"></bet-csv-parser>
-    <customer-profiler id="customerProfiler"></custome-profiler>
+    <customer-profiler id="customerProfiler"></customer-profiler>
     
     <iron-ajax url="Settled.csv" auto on-response="_handleSettledData" handle-as="text"></iron-ajax>
     <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
@@ -59,36 +59,7 @@
       
       _handleSettledData: function(data) {
         this._settledData = this.$.csvParser.parse(data.detail.response);
-        this._profileCustomers(this._settledData);
-      },
-      
-      _profileCustomers: function(settledData) {
-        var settledDataByCustomer = this._groupDataByCustomer(settledData);
-        
-        var customerProfiles = {};
-        var customers = Object.keys(settledDataByCustomer);
-        customers.forEach(function(customer) {
-          var customerData = settledDataByCustomer[customer];
-          customerProfiles[customer] = this.$.customerProfiler.profileCustomer(customerData, settledData.headers);          
-        }.bind(this));
-        
-        this._customerProfiles = customerProfiles;
-      },
-      
-      _groupDataByCustomer: function(settledData) {
-        var customerIndex = settledData.headers.indexOf("Customer");
-        
-        var settledDataByCustomer = {};
-        settledData.rows.forEach(function(row) {
-          var customer = row[customerIndex];
-          if (!settledDataByCustomer[customer]) {
-            settledDataByCustomer[customer] = [];
-          }
-          
-          settledDataByCustomer[customer].push(row);
-        });
-        
-        return settledDataByCustomer;  
+        this._customerProfiles = this.$.customerProfiler.profileCustomersFromSettledData(this._settledData);
       },
       
       _handleUnsettledData: function(data) {

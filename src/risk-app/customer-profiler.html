@@ -8,6 +8,35 @@
     
     _CUSTOMER_RISKY_THRESHOLD: 0.60,
     
+    profileCustomersFromSettledData: function(settledData) {
+      var settledDataByCustomer = this._groupDataByCustomer(settledData);
+      
+      var customerProfiles = {};
+      var customers = Object.keys(settledDataByCustomer);
+      customers.forEach(function(customer) {
+        var customerData = settledDataByCustomer[customer];
+        customerProfiles[customer] = this.profileCustomer(customerData, settledData.headers);          
+      }.bind(this));
+      
+      return customerProfiles;
+    },
+    
+    _groupDataByCustomer: function(settledData) {
+      var customerIndex = settledData.headers.indexOf("Customer");
+      
+      var settledDataByCustomer = {};
+      settledData.rows.forEach(function(row) {
+        var customer = row[customerIndex];
+        if (!settledDataByCustomer[customer]) {
+          settledDataByCustomer[customer] = [];
+        }
+        
+        settledDataByCustomer[customer].push(row);
+      });
+      
+      return settledDataByCustomer;  
+    },
+    
     profileCustomer: function(customerData, headers) {
       // Get avg win percentage for customer
       var winIndex = headers.indexOf("Win");
