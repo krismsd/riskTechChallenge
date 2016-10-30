@@ -23,11 +23,19 @@
       .cell {
         display: table-cell;
         padding: 5px;
+        background-color: #DDDDDD;
+        border-top: 1px solid #CCCCCC; 
       }
       
       .header .cell {
         border-bottom: 1px solid black;
         padding-bottom: 0px;
+        background-color: black;
+        color: white;
+      }
+      
+      .cell.risky {
+        background-color: #FF4444;
       }
     </style>
     
@@ -42,7 +50,7 @@
       <template is="dom-repeat" items="{{settledData.rows}}" as="row">
         <div class="row">
           <template is="dom-repeat" items="{{row}}">
-            <span class="cell">{{item}}</span>
+            <span class$="{{computeClass(row, settledData.headers)}}">{{item}}</span>
           </template>
         </div>
       </template>
@@ -56,6 +64,20 @@
       properties: {
         settledData: Object,
         customerProfiles: Object
+      },
+      
+      computeClass: function(row, headers) {
+        var customerIndex = headers.indexOf('Customer');
+        var customer = row[customerIndex];
+        var customerProfile = this.customerProfiles[customer];
+        
+        var classes = ['cell']
+        
+        if (customerProfile.isRisky) {
+          classes.push('risky');
+        }
+        
+        return classes.join(' ');
       }
 
     });
