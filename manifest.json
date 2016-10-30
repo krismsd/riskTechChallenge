@@ -1,0 +1,7 @@
+{
+  "name": "risk",
+  "short_name": "risk",
+  "description": "App for analysing client risk from betting data",
+  "start_url": "/",
+  "display": "standalone"
+}
