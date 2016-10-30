@@ -1,4 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="betdata-csv-parser.html">
 
 <dom-module id="risk-app">
   <template>
@@ -8,6 +11,11 @@
       }
     </style>
     <h2>Hello [[prop1]]</h2>
+    
+    <betdata-csv-parser id="csvParser"></bet-csv-parser>
+    
+    <iron-ajax url="Settled.csv" auto on-response="_handleSettledData" handle-as="text"></iron-ajax>
+    <iron-ajax url="Unsettled.csv" auto on-response="_handleUnsettledData" handle-as="text"></iron-ajax>
   </template>
 
   <script>
@@ -21,6 +29,18 @@
           value: 'risk-app',
         },
       },
+      
+      
+      _handleSettledData: function(data) {
+        var settledData = this.$.csvParser.parse(data.detail.response);
+        
+        console.log('settled', settledData);
+      },
+      
+      _handleUnsettledData: function(data) {
+        var unsettledData = this.$.csvParser.parse(data.detail.response);
+        console.log('unsettled', unsettledData);
+      }
 
     });
   </script>

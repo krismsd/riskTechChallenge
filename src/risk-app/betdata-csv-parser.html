@@ -1,0 +1,46 @@
+<script>
+  'use strict';
+  
+  Polymer({
+    is: 'betdata-csv-parser',
+    
+    parse: function(text) {
+      var lines = text.split('\n');
+      
+      // Parse out header
+      var headersLine = lines[0];
+      var headers = headersLine.split(',').map(this._convertHeader); 
+
+      // Get data - everything but first line
+      var dataLines = lines.slice(1);
+      
+      return dataLines.map(function(line) { 
+        return this._convertData(line, headers);  
+      }.bind(this));
+    },
+    
+    _convertHeader: function(text) {
+      // Convert the header to camelcase e.g. "To Win" -> "toWin"
+      return text.toLowerCase().replace(/ ./, function(group) {
+        return group.substr(1).toUpperCase();
+      });
+    },
+    
+    _convertData: function(line, headers) {
+      var cells = line.split(',');
+      
+      var obj = {};
+      for (var i = 0; i < headers.length; i++) {
+        var header = headers[i];
+        
+        // Given all the cells are only integers here I assume to treat them as such 
+        var cell = Number.parseInt(cells[i]);
+        
+        obj[header] = cell;
+      }
+      
+      return obj;
+    }
+  });
+
+</script>
