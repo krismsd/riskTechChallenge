@@ -8,7 +8,7 @@ To run (assuming you have NodeJS + Bower installed):
 
 ```
 npm install -g polymer-cli # Install polymer cli
-polymer serve # serve the site
+polymer serve # Serve the site
 ```
 
 The site should now be running at http://localhost:8080/
@@ -19,3 +19,8 @@ The site should now be running at http://localhost:8080/
 ```
 $ polymer test
 ```
+
+## Update CSV data
+
+The `unsettled.csv` and `settled.csv` files are in `src/risk-app/`. These may be
+replaced to update the betting data.
