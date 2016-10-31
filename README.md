@@ -1,38 +1,21 @@
-# \<risk\>
+# Bet Risk Tech Challenge
 
-App for analysing client risk from betting data
+App for analysing client risk from betting data. Built using [Polymer](https://www.polymer-project.org).
 
-## Install the Polymer-CLI
+## Running
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
-
-## Viewing Your Application
+To run (assuming you have NodeJS + Bower installed):
 
 ```
-$ polymer serve
+npm install -g polymer-cli # Install polymer cli
+polymer serve # serve the site
 ```
 
-## Building Your Application
+The site should now be running at http://localhost:8080/
 
-```
-$ polymer build
-```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
-```
 
 ## Running Tests
 
 ```
 $ polymer test
 ```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
