@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="bet-profiler.html">
+
 <dom-module id="unsettled-display">
   <template>
     <style>
@@ -51,6 +53,8 @@
       }
     </style>
     
+    <bet-profiler id="betProfiler"></bet-profiler>
+    
     <h3>Upcoming Bets</h3>
     <div class="table">
       <div class="header">
@@ -83,29 +87,8 @@
         var customer = row[customerIndex];
         var customerProfile = this.customerProfiles[customer];
         
-        var classes = ['row']
-        
-        if (customerProfile.isRisky) {
-          classes.push('risky');
-        }
-        
-        // Identify where bets are unusual in that they are above the customers average
-        var stakeIndex = headers.indexOf('Stake');
-        var stake = row[stakeIndex];
-        
-        if (stake >= customerProfile.stakeAverage * 30) {
-          classes.push('highly-unusual');
-        }
-        else if (stake >= customerProfile.stakeAverage * 10) {
-          classes.push('unusual');
-        }        
-        
-        // Mark cases where the potential win amount is very high
-        var toWinIndex = headers.indexOf('To Win');
-        var toWin = row[toWinIndex];
-        if (toWin >= 1000) {
-          classes.push('excessive');
-        }
+        var betCharacteristics = this.$.betProfiler.profileUpcomingBet(row, headers, customerProfile);
+        var classes = ['row'].concat(betCharacteristics);
         
         return classes.join(' ');
       }

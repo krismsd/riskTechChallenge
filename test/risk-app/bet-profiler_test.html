@@ -1,0 +1,87 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>risk-app test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../src/risk-app/bet-profiler.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <bet-profiler id="profiler"></bet-profiler>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('bet-profiler', function() {
+        
+        test('bet from customer who\'s profile says they\'re risky should be risky', function() {
+          var element = fixture('basic');
+          
+          var headers = ['Customer', 'Stake', 'To Win'];
+          var row = [1, 0, 0];
+          var customerProfile = { isRisky: true, stakeAverage: 100 };
+          
+          var profile = element.profileUpcomingBet(row, headers, customerProfile);
+          
+          assert.deepEqual(profile, ['risky']);
+        });
+        
+        test('bet from customer for which the stake is at least 10 times higher than their average', function() {
+          var element = fixture('basic');
+          
+          var headers = ['Customer', 'Stake', 'To Win'];
+          var row = [1, 110, 200];
+          var customerProfile = { isRisky: false, stakeAverage: 10 };
+          
+          var profile = element.profileUpcomingBet(row, headers, customerProfile);
+          
+          assert.deepEqual(profile, ['unusual']);    
+        });
+        
+        test('bet from customer for which the stake is at least 30 times higher than their average', function() {
+          var element = fixture('basic');
+          
+          var headers = ['Customer', 'Stake', 'To Win'];
+          var row = [1, 350, 500];
+          var customerProfile = { isRisky: false, stakeAverage: 10 };
+          
+          var profile = element.profileUpcomingBet(row, headers, customerProfile);
+          
+          assert.deepEqual(profile, ['highly-unusual']);    
+        });
+        
+        test('bet for which the potential win is over $1000', function() {
+          var element = fixture('basic');
+          
+          var headers = ['Customer', 'Stake', 'To Win'];
+          var row = [1, 350, 1500];
+          var customerProfile = { isRisky: false, stakeAverage: 350 };
+          
+          var profile = element.profileUpcomingBet(row, headers, customerProfile);
+          
+          assert.deepEqual(profile, ['excessive']);    
+        });
+        
+        test('bet showing a combination of risks', function() {
+          var element = fixture('basic');
+          
+          var headers = ['Customer', 'Stake', 'To Win'];
+          var row = [1, 350, 1500];
+          var customerProfile = { isRisky: true, stakeAverage: 10 };
+          
+          var profile = element.profileUpcomingBet(row, headers, customerProfile);
+          
+          assert.deepEqual(profile, ['risky', 'highly-unusual', 'excessive']);    
+        });
+  
+      });
+    </script>
+  </body>
+</html>

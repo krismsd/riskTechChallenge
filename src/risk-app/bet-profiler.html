@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<script>
+  'use strict';
+  
+  Polymer({
+    is: 'bet-profiler',
+    
+    _UNUSUAL_MULTIPLE: 10,
+    _HIGHLY_UNUSUAL_MULTIPLE: 30,
+    _EXCESSIVE_TOWIN: 1000,
+    
+    profileUpcomingBet: function(row, headers, customerProfile) {
+      var characteristics = [];
+      
+      if (customerProfile.isRisky) {
+        characteristics.push('risky');
+      }
+      
+      // Identify where bets are unusual in that they are above the customers average
+      var stakeIndex = headers.indexOf('Stake');
+      var stake = row[stakeIndex];
+      
+      if (stake >= customerProfile.stakeAverage * this._HIGHLY_UNUSUAL_MULTIPLE) {
+        characteristics.push('highly-unusual');
+      }
+      else if (stake >= customerProfile.stakeAverage * this._UNUSUAL_MULTIPLE) {
+        characteristics.push('unusual');
+      }        
+      
+      // Mark cases where the potential win amount is very high
+      var toWinIndex = headers.indexOf('To Win');
+      var toWin = row[toWinIndex];
+      if (toWin >= this._EXCESSIVE_TOWIN) {
+        characteristics.push('excessive');
+      }
+      
+      return characteristics;
+    }
+    
+  });
+</script>
