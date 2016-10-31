@@ -34,8 +34,8 @@
         color: white;
       }
       
-      .cell.risky {
-        background-color: #FF4444;
+      .row.risky {
+        outline: 1px solid black;
       }
     </style>
     
@@ -48,9 +48,9 @@
       </div>
       
       <template is="dom-repeat" items="{{settledData.rows}}" as="row">
-        <div class="row">
+        <div class$="{{computeClass(row, settledData.headers)}}">
           <template is="dom-repeat" items="{{row}}">
-            <span class$="{{computeClass(row, settledData.headers)}}">{{item}}</span>
+            <span class="cell">{{item}}</span>
           </template>
         </div>
       </template>
@@ -71,7 +71,7 @@
         var customer = row[customerIndex];
         var customerProfile = this.customerProfiles[customer];
         
-        var classes = ['cell']
+        var classes = ['row'];
         
         if (customerProfile.isRisky) {
           classes.push('risky');

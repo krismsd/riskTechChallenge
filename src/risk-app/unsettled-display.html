@@ -34,8 +34,20 @@
         color: white;
       }
       
-      .cell.risky {
-        background-color: #FF4444;
+      .row.risky {
+        outline: 1px solid black;
+      }
+      
+      .row.unusual .cell {
+        background-color: orange;
+      }
+      
+      .row.highly-unusual .cell {
+        background-color: red;
+      }
+      
+      .row.excessive .cell:last-of-type {
+        font-weight: bold;
       }
     </style>
     
@@ -48,9 +60,9 @@
       </div>
       
       <template is="dom-repeat" items="{{unsettledData.rows}}" as="row">
-        <div class="row">
+        <div class$="{{computeClass(row, unsettledData.headers)}}">
           <template is="dom-repeat" items="{{row}}">
-            <span class$="{{computeClass(row, unsettledData.headers)}}">{{item}}</span>
+            <span class="cell">{{item}}</span>
           </template>
         </div>
       </template>
@@ -71,13 +83,29 @@
         var customer = row[customerIndex];
         var customerProfile = this.customerProfiles[customer];
         
-        var classes = ['cell']
+        var classes = ['row']
         
         if (customerProfile.isRisky) {
           classes.push('risky');
         }
         
-        // TODO: need to identify risk of unsettled data here
+        // Identify where bets are unusual in that they are above the customers average
+        var stakeIndex = headers.indexOf('Stake');
+        var stake = row[stakeIndex];
+        
+        if (stake >= customerProfile.stakeAverage * 30) {
+          classes.push('highly-unusual');
+        }
+        else if (stake >= customerProfile.stakeAverage * 10) {
+          classes.push('unusual');
+        }        
+        
+        // Mark cases where the potential win amount is very high
+        var toWinIndex = headers.indexOf('To Win');
+        var toWin = row[toWinIndex];
+        if (toWin >= 1000) {
+          classes.push('excessive');
+        }
         
         return classes.join(' ');
       }
