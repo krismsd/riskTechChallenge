@@ -17,7 +17,7 @@ The site should now be running at http://localhost:8080/
 ## Running Tests
 
 ```
-$ polymer test
+polymer test
 ```
 
 ## Update CSV data
